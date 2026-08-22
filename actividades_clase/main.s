@@ -9,14 +9,14 @@ suma:
 	pushq	%rbp
 	.cfi_def_cfa_offset 16
 	.cfi_offset 6, -16
-	movq	%rsp, %rbp
+	movq	%rsp, %rbp// movq = movequadword
 	.cfi_def_cfa_register 6
 	movl	%edi, -4(%rbp)
 	movl	%esi, -8(%rbp)
 	movl	-4(%rbp), %edx
 	movl	-8(%rbp), %eax
-	addl	%edx, %eax
-	popq	%rbp
+	addl	%edx, %eax  // suma de enteros
+	popq	%rbp //pop off  stack
 	.cfi_def_cfa 7, 8
 	ret
 	.cfi_endproc
@@ -49,7 +49,7 @@ main:
 	movl	$0, %eax
 	call	printf@PLT
 	movl	$0, %eax
-	leave
+	leave //High level procedure exit
 	.cfi_def_cfa 7, 8
 	ret
 	.cfi_endproc
