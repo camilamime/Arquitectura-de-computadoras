@@ -1922,7 +1922,7 @@ int main(){
  printf("Cantidad de digitos: ");
  scanf("%d",&n);
  for(int i=0;i<=n;i++){
-  printf("%d",a);
+  printf("%d ",a);
   siguiente=a+b;
   a=b;
   b=siguiente;

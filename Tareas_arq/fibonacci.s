@@ -5,6 +5,8 @@
 	.string	"Cantidad de digitos: "
 .LC1:
 	.string	"%d"
+.LC2:
+	.string	"%d "
 	.text
 	.globl	main
 	.type	main, @function
@@ -39,7 +41,7 @@ main:
 .L3:
 	movl	-24(%rbp), %eax
 	movl	%eax, %esi
-	leaq	.LC1(%rip), %rax
+	leaq	.LC2(%rip), %rax
 	movq	%rax, %rdi
 	movl	$0, %eax
 	call	printf@PLT
