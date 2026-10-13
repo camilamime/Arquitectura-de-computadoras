@@ -1,0 +1,73 @@
+#include <avr/io.h>
+.equ LED_ROJO, 0
+.equ LED_AMARILLO, 1
+.equ LED_AZUL, 2
+.equ DIP1, 3
+.equ DIP2, 4
+.section .text
+.global main
+main:
+sbi _SFR_IO_ADDR(DDRB), LED_ROJO
+sbi _SFR_IO_ADDR(DDRB), LED_VERDE
+sbi _SFR_IO_ADDR(DDRB), LED_AMARILLO
+cbi _SFR_IO_ADDR(DDRB), DIP1
+cbi _SFR_IO_ADDR(DDRB), DIP2
+sbi _SFR_IO_ADDR(PORTB), DIP1
+sbi _SFR_IO_ADDR(PORTB), DIP2
+MAIN_LOOP:
+in r17, _SFR_IO_ADDR(PINB)
+andi r17, 0b00011000
+cpi r17, 0b00000000
+breq FAST
+cpi r17, 0b00001000
+breq SLOW
+cpi r17, 0b00010000
+breq NORMAL
+cpi r17, 0b00011000
+breq OFF
+rjmp MAIN_LOOP
+OFF:
+ldi r16, 0b00011000
+out _SFR_IO_ADDR(PORTB), r16
+rjmp MAIN_LOOP
+SLOW:
+ldi r21, 0xFF
+rcall PENDULUM
+rjmp MAIN_LOOP
+NORMAL:
+ldi r21, 0x60
+rcall PENDULUM
+rjmp MAIN_LOOP
+FAST:
+ldi r21, 0x05
+rcall PENDULUM
+rjmp MAIN_LOOP
+PENDULUM:
+ldi r16, 0b00011001
+out _SFR_IO_ADDR(PORTB), r16
+rcall DELAY
+ldi r16, 0b00011010
+out _SFR_IO_ADDR(PORTB), r16
+rcall DELAY
+ldi r16, 0b00011100
+out _SFR_IO_ADDR(PORTB), r16
+rcall DELAY
+ldi r16, 0b00011010
+out _SFR_IO_ADDR(PORTB), r16
+rcall DELAY
+ret
+DELAY:
+mov r18, r21
+DELAY1:
+ldi r19, 0xFF
+DELAY2:
+ldi r20, 0xFF
+DELAY3:
+subi r20, 1
+brne DELAY3
+subi r19, 1
+brne DELAY2
+subi r18, 1
+brne DELAY1
+ret
+
