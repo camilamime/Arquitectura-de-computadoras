@@ -1,38 +1,30 @@
-#define F.CPU 16000000UL
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <stdint.h>
 
-Volative uint_16 Contador_ms = 0;
+volatile uint16_t Contador_ms = 0;
 
-ISR (TIMER1_COMPA_vect){
-
+ISR(TIMER1_COMPA_vect) {
     Contador_ms++;
-
-    if (contador-ms >=500) { PORTB  ^= (1<<PB5); Contador_ms = 0;
-
-}   
+    if (Contador_ms >= 500) {
+        PORTD ^= (1 << PD4);
+        Contador_ms = 0;
+    }
 }
 
-int main () {
+int main(void) {
+    DDRD |= (1 << DDD4);
 
-DDRB | = (1<<DDB5);
+    TCCR1A = 0;
+    TCCR1B = 0;
+    TCNT1  = 0;
+    OCR1A  = 249;
 
-TCRIA=0;
+    TCCR1B |= (1 << WGM12);                
+    TCCR1B |= (1 << CS11) | (1 << CS10);       
 
-TCCR1B=0;
+    TIMSK1 |= (1 << OCIE1A);
+    sei();
 
-TCNT1=0;
-
-OCR1A = 249;
-
-TCCR1B |= (1<<WGM12);
-
-TCCR1B |= (1 <<(CS11) | (1<<CS10));
-
-TIMSK1 |= (1<<OCIE1A);
-
-sei();
-
-while (1);
+    while (1);
 }
